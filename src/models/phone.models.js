@@ -1,20 +1,22 @@
 import mongoose from 'mongoose';
 
 // Define the schema
-const userSchema = new mongoose.Schema({
-    name: {
+const phoneSchema = new mongoose.Schema({
+    brand: {
         type: String,
         required: true,
     },
-    email: {
+    model: {
         type: String,
         required: true
     },
-    password: {
-        type: String,
+    price: {
+        type: Number,
+        default:0,
         required: true
     } 
 }, { timestamps: true });
 
-const user = mongoose.model('User', userSchema);
-export default user;
+const phone = mongoose.model('Phone', phoneSchema);
+export default phone;
+

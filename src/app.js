@@ -1,6 +1,7 @@
 import express  from 'express';
 import cors from 'cors'
-import userRouter from './routes/user.routes.js';
+import userRouter from './routes/user.routes.js'; 
+import phoneRouter from './routes/phone.routes.js';
 
 export const app = express();
 
@@ -10,6 +11,8 @@ app.use(cors())
 
 
 app.use('/' , userRouter)
+app.use('/v1/' , phoneRouter)
+
 
 
 
