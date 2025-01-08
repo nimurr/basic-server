@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import userRouter from './routes/user.routes.js';
+import phoneRouter from './routes/phone.routes.js';
 
 export const app = express();
 
@@ -10,9 +11,7 @@ app.use(cors());
 
 //=================== Routes =================
 app.use('/api/v1', userRouter);
-
-
-
+app.use('/api/v1', phoneRouter);
 
 
 

@@ -1,3 +1,4 @@
+import e from 'express';
 import mongoose from 'mongoose';
 
 // Define the schema
@@ -13,7 +14,12 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    } 
+    } ,
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    }
 }, { timestamps: true });
 
 const user = mongoose.model('User', userSchema);

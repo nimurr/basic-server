@@ -1,4 +1,4 @@
-import phone from "../models/phone.models.js"
+ import phone from "../models/phone.models.js"
 
 const createPhoneDB = async (payload) => {
     const result = await phone.create(payload)

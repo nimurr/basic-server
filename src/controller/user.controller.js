@@ -27,7 +27,7 @@ const createUser = async (req, res) => {
     //============= User Creation ==============
     const result = await userService.createUserDB(req.body)
     //============= Token Creation ==============
-    const token = jwt.sign({ id: result._id, email: result.email }, 'GJHJ8sd09sdf0sdf0sd55dfghhg47dsfg87ud', { expiresIn: '30d' });
+    const token = jwt.sign({ id: result._id, email: result.email }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
     res.status(201).send({
         message: "User Registered successfully !", status: 201,
@@ -38,20 +38,27 @@ const createUser = async (req, res) => {
 }
 
 const userLogin = async (req, res) => {
-
     const { email, password } = req.body
+
     if (!email || !password) {
         res.status(400).send({ message: "All fields are required !", status: 400 })
     }
     const result = await user.findOne({ email: email })
+
     if (result) {
         const isPasswordCorrect = await bcrypt.compare(password, result.password)
-        if (isPasswordCorrect) {
-            const token = jwt.sign({ id: result._id, email: result.email }, 'GJHJ8sd09sdf0sdf0sd55dfghhg47dsfg87ud', { expiresIn: '30d' });
-            res.status(200).send({ message: "User LoggedIn successfully !", status: 200, user: { id: result._id, email: result.email, name: result.name }, token: token })
+        if (!isPasswordCorrect) {
+            res.status(400).send({ message: "Password is incorrect", status: 400 })
         }
         else {
-            res.status(400).send({ message: "Password is incorrect !", status: 400 })
+            if (isPasswordCorrect && email == result.email) {
+                const token = jwt.sign({ id: result._id, email: result.email , role : result.role }, process.env.JWT_SECRET, { expiresIn: '30d' });
+
+                res.status(200).send({ message: "User LoggedIn successfully !", status: 200, user: { id: result._id, email: result.email, name: result.name , role : result.role }, token: token })
+            }
+            else {
+                res.status(400).send({ message: "Password is incorrect", status: 400 })
+            }
         }
     }
     else {
@@ -71,7 +78,7 @@ const allUser = async (req, res) => {
     res.status(200).send(result)
 }
 
- 
+
 
 export const userController = {
     createUser,

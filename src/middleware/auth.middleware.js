@@ -1,12 +1,41 @@
-const multer = require('multer');
+import jwt from 'jsonwebtoken';
 
-const storage = multer.diskStorage({
-    destination: './uploads',
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    },
-});
+const authCheck = (requiredRole) => {
 
-const upload = multer({ storage });
+  return (req, res, next) => {
+    try {
+      const authHeader = req.headers.authorization;
+ 
 
-export default upload;
+      // Check if Authorization header exists
+      if (!authHeader) {
+        return res.status(401).json({ message: 'Authorization header is missing' });
+      }
+ 
+      // Decode the token
+      const decodedToken = jwt.decode(authHeader);
+
+      console.log(decodedToken);
+
+      if (!decodedToken) {
+        return res.status(401).json({ message: 'Invalid token' });
+      }
+
+      // Attach decoded information to the request object
+      req.user = decodedToken;
+
+      // Check if the user's role matches the required role
+      if (requiredRole && decodedToken.role !== requiredRole) {
+        return res.status(403).json({ message: 'Access denied: insufficient permissions' });
+      }
+
+      // Call the next middleware or route handler
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
+};
+
+export default authCheck;
