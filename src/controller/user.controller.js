@@ -78,8 +78,6 @@ const allUser = async (req, res) => {
     res.status(200).send(result)
 }
 
-
-
 export const userController = {
     createUser,
     userLogin,

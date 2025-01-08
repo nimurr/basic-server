@@ -5,11 +5,10 @@ const authCheck = (requiredRole) => {
   return (req, res, next) => {
     try {
       const authHeader = req.headers.authorization;
- 
 
       // Check if Authorization header exists
       if (!authHeader) {
-        return res.status(401).json({ message: 'Authorization header is missing' });
+        return res.status(401).json({ message: 'Authorization Token is missing' });
       }
  
       // Decode the token
@@ -18,7 +17,7 @@ const authCheck = (requiredRole) => {
       console.log(decodedToken);
 
       if (!decodedToken) {
-        return res.status(401).json({ message: 'Invalid token' });
+        return res.status(401).json({ message: 'Token not found' });
       }
 
       // Attach decoded information to the request object

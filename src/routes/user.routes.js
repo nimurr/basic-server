@@ -3,7 +3,7 @@ import { userController } from "../controller/user.controller.js"
 
 const userRouter = router()
 
-userRouter.post('/user/register',  userController.createUser)
+userRouter.post('/user/register' ,userController.createUser)
 userRouter.post('/user/login', userController.userLogin)
 userRouter.get('/user',  userController.allUser)
 userRouter.get('/user/:id', userController.singleUser)
