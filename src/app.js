@@ -3,6 +3,7 @@ import cors from 'cors'
 import userRouter from './routes/user.routes.js'; 
 import phoneRouter from './routes/phone.routes.js';
 
+
 export const app = express();
 
 // Middleware to parse JSON data
