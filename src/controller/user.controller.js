@@ -27,32 +27,34 @@ const createUser = async (req, res) => {
     //============= User Creation ==============
     const result = await userService.createUserDB(req.body)
     //============= Token Creation ==============
-    const token = jwt.sign({ id: result._id , email: result.email}, 'GJHJ8sd09sdf0sdf0sd55dfghhg47dsfg87ud', { expiresIn: '30d' });
-    
-    res.status(201).send({ message: "User Registered successfully !", status: 201, 
-        user: { id: result._id , email: result.email , name: result.name} , token: token })
+    const token = jwt.sign({ id: result._id, email: result.email }, 'GJHJ8sd09sdf0sdf0sd55dfghhg47dsfg87ud', { expiresIn: '30d' });
+
+    res.status(201).send({
+        message: "User Registered successfully !", status: 201,
+        user: { id: result._id, email: result.email, name: result.name }, token: token
+    })
 
 
 }
 
-const userLogin  = async(req , res ) =>{
+const userLogin = async (req, res) => {
 
-    const { email , password } = req.body
-    if(!email || !password){
+    const { email, password } = req.body
+    if (!email || !password) {
         res.status(400).send({ message: "All fields are required !", status: 400 })
     }
-    const result = await userService.findOne({email: email})
-    if(result){
-        const isPasswordCorrect = await bcrypt.compare(password , result.password)
-        if(isPasswordCorrect){
-            const token = jwt.sign({ id: result._id , email: result.email}, 'GJHJ8sd09sdf0sdf0sd55dfghhg47dsfg87ud', { expiresIn: '30d' });
-            res.status(200).send({ message: "User LoggedIn successfully !", status: 200, user: { id: result._id , email: result.email , name: result.name} , token: token })
+    const result = await user.findOne({ email: email })
+    if (result) {
+        const isPasswordCorrect = await bcrypt.compare(password, result.password)
+        if (isPasswordCorrect) {
+            const token = jwt.sign({ id: result._id, email: result.email }, 'GJHJ8sd09sdf0sdf0sd55dfghhg47dsfg87ud', { expiresIn: '30d' });
+            res.status(200).send({ message: "User LoggedIn successfully !", status: 200, user: { id: result._id, email: result.email, name: result.name }, token: token })
         }
-        else{
+        else {
             res.status(400).send({ message: "Password is incorrect !", status: 400 })
         }
-    } 
-    else{
+    }
+    else {
         res.status(400).send({ message: "User not found !", status: 400 })
     }
 }
@@ -62,8 +64,18 @@ const singleUser = async (req, res) => {
     const result = await userService.singleUserDB(id)
     res.status(200).send(result)
 }
+
+const allUser = async (req, res) => {
+
+    const result = await userService.allUserDB();
+    res.status(200).send(result)
+}
+
+ 
+
 export const userController = {
     createUser,
     userLogin,
+    allUser,
     singleUser
 }

@@ -11,9 +11,15 @@ const singleUserDB = async (id) => {
     return result
 }
 
+const allUserDB = async () => {
+    const result = await user.find()
+    return result
+}
+
 
 export const userService = {
     createUserDB,
-    singleUserDB
+    singleUserDB,
+    allUserDB
 
 }
