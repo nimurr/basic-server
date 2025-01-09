@@ -52,9 +52,9 @@ const userLogin = async (req, res) => {
         }
         else {
             if (isPasswordCorrect && email == result.email) {
-                const token = jwt.sign({ id: result._id, email: result.email , role : result.role }, process.env.JWT_SECRET, { expiresIn: '30d' });
+                const token = jwt.sign({ id: result._id, email: result.email, role: result.role }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
-                res.status(200).send({ message: "User LoggedIn successfully !", status: 200, user: { id: result._id, email: result.email, name: result.name , role : result.role }, token: token })
+                res.status(200).send({ message: "User LoggedIn successfully !", status: 200, user: { id: result._id, email: result.email, name: result.name, role: result.role }, token: token })
             }
             else {
                 res.status(400).send({ message: "Password is incorrect", status: 400 })
@@ -67,16 +67,30 @@ const userLogin = async (req, res) => {
 }
 
 const singleUser = async (req, res) => {
+
+
+    const authHeader = req.headers.authorization;
+    const decodedToken = jwt.decode(authHeader);
+
+    // console.log(decodedToken);
+
     const { id } = req.params
-    const result = await userService.singleUserDB(id)
-    res.status(200).send({
-        message: "Single User",
-        status: 200,
-        result: result
-    })
+    
+    if (id == decodedToken.id) {
+        const result = await userService.singleUserDB(id)
+        res.status(200).send({
+            message: "User Get Successfully !",
+            status: 200,
+            result: result
+        })
+    }
+    else{
+        res.status(400).send({ message: "User not Authrized for get this user !", status: 400 })
+    }
 }
 
 const allUser = async (req, res) => {
+
 
     const result = await userService.allUserDB();
     res.status(200).send({

@@ -36,11 +36,21 @@ app.use((req, res, next) => {
 
 // Centralized Error-Handling Middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack); // Log the error stack for debugging
+    console.error(err.stack); // Log the entire error stack for debugging
 
     const statusCode = err.status || 500;
+
+    // Extract validation error paths if they exist
+    const errorPaths = err.errors
+        ? Object.keys(err.errors).map((key) => ({
+              path: err.errors[key].path,
+              message: err.errors[key].message,
+          }))
+        : null;
+
     res.status(statusCode).json({
         success: false,
         message: err.message || 'Internal Server Error',
+        errors: errorPaths || null, // Include validation paths if present
     });
 });
