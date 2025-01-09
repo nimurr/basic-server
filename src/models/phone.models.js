@@ -14,7 +14,12 @@ const phoneSchema = new mongoose.Schema({
         type: Number,
         default:0,
         required: true
-    } 
+    }
+    ,
+    image: {
+        type: String,
+        required: true
+    }
 }, { timestamps: true });
 
 const phone = mongoose.model('Phone', phoneSchema);

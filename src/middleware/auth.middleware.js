@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 const authCheck = (requiredRole) => {
 
   return (req, res, next) => {
+    
     try {
       const authHeader = req.headers.authorization;
 
