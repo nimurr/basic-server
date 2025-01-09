@@ -69,13 +69,21 @@ const userLogin = async (req, res) => {
 const singleUser = async (req, res) => {
     const { id } = req.params
     const result = await userService.singleUserDB(id)
-    res.status(200).send(result)
+    res.status(200).send({
+        message: "Single User",
+        status: 200,
+        result: result
+    })
 }
 
 const allUser = async (req, res) => {
 
     const result = await userService.allUserDB();
-    res.status(200).send(result)
+    res.status(200).send({
+        message: "All Users",
+        status: 200,
+        result: result
+    })
 }
 
 export const userController = {
